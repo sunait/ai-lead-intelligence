@@ -15,7 +15,7 @@ import {
 
 export function LeadAnalyzer() {
   const [url, setUrl] = useState("");
-  const [analysis, setAnalysis] = useState("");
+  const [analysis, setAnalysis] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
 
@@ -49,9 +49,9 @@ export function LeadAnalyzer() {
 
       console.error(error);
 
-      setAnalysis(
-        "Something went wrong."
-      );
+      setAnalysis({
+        error: "Something went wrong."
+      });
 
     } finally {
 
@@ -118,9 +118,9 @@ export function LeadAnalyzer() {
 
           <CardContent>
 
-            <p className="whitespace-pre-wrap">
-              {analysis}
-            </p>
+            <pre className="whitespace-pre-wrap text-sm">
+              {JSON.stringify(analysis, null, 2)}
+            </pre>
 
           </CardContent>
 

@@ -52,46 +52,37 @@ export async function POST(request: Request) {
 
 
 
-    const prompt = `
+const prompt = `
 You are an AI Sales Intelligence Assistant.
 
-Analyze the following company website:
+Analyze this company website:
 
 ${url}
 
-Create a professional business lead analysis.
+Return ONLY valid JSON.
 
-Return the following information:
+Use this structure:
 
-1. Company Overview
-- What does the company do?
-- Main business activities.
+{
+  "companyName": "",
+  "industry": "",
+  "overview": "",
+  "businessModel": "",
+  "products": [],
+  "targetCustomers": [],
+  "painPoints": [],
+  "salesOpportunities": [],
+  "outreachStrategy": "",
+  "coldEmailAngle": ""
+}
 
-2. Industry
-- Main industry and business category.
-
-3. Business Model
-- How does the company generate revenue?
-
-4. Products and Services
-- Main products or services offered.
-
-5. Target Customers
-- Who are their ideal customers?
-
-6. Possible Business Pain Points
-- What challenges could this company have?
-
-7. Sales Opportunities
-- What solutions, services or partnerships could be valuable?
-
-8. Recommended Outreach Strategy
-- How should a sales person approach this company?
-
-9. Cold Email Angle
-- Suggest a personalized opening message.
-
-Keep the analysis concise, practical and focused on sales intelligence.
+Rules:
+- Keep answers concise.
+- Focus on sales intelligence.
+- Do not use markdown.
+- Do not include explanations outside JSON.
+- Your entire response must start with { and end with }.
+- Do not use markdown code blocks.
 `;
 
 
@@ -124,11 +115,29 @@ try {
     const response = result.response.text();
 
 
+    const jsonStart = response.indexOf("{");
+    const jsonEnd = response.lastIndexOf("}") + 1;
+
+
+    if (jsonStart === -1 || jsonEnd === 0) {
+      throw new Error("Invalid JSON response from AI");
+    }
+
+
+    const cleanJson = response.substring(
+      jsonStart,
+      jsonEnd
+    );
+
+
+const analysis = JSON.parse(cleanJson);
+
+
     return NextResponse.json(
       {
         success: true,
         url,
-        analysis: response
+        analysis
       },
       {
         status: 200
