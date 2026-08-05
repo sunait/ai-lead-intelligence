@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+
 import {
   Card,
   CardContent,
@@ -11,69 +12,123 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+
 export function LeadAnalyzer() {
   const [url, setUrl] = useState("");
-  const [analyzed, setAnalyzed] = useState(false);
+  const [analysis, setAnalysis] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  function handleAnalyze() {
-    setAnalyzed(true);
+
+  async function handleAnalyze() {
+
+    if (!url) return;
+
+    setLoading(true);
+    setAnalysis("");
+
+    try {
+
+      const response = await fetch("/api/analyze", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+          url,
+        }),
+      });
+
+
+      const data = await response.json();
+
+      setAnalysis(data.analysis);
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      setAnalysis(
+        "Something went wrong."
+      );
+
+    } finally {
+
+      setLoading(false);
+
+    }
   }
+
 
   return (
     <div className="space-y-6">
 
+
       <Card>
+
         <CardHeader>
           <CardTitle>
             Analyze New Company
           </CardTitle>
         </CardHeader>
 
+
         <CardContent className="space-y-4">
+
 
           <Input
             placeholder="https://company.com"
             value={url}
-            onChange={(e) => setUrl(e.target.value)}
+            onChange={(e) =>
+              setUrl(e.target.value)
+            }
           />
 
-          <Button onClick={handleAnalyze}>
-            Analyze
+
+          <Button
+            onClick={handleAnalyze}
+            disabled={loading}
+          >
+
+            {loading
+              ? "Analyzing..."
+              : "Analyze"
+            }
+
           </Button>
 
+
         </CardContent>
+
       </Card>
 
 
-      {analyzed && (
+
+      {analysis && (
+
         <Card>
+
           <CardHeader>
             <CardTitle>
               AI Analysis Result
             </CardTitle>
           </CardHeader>
 
-          <CardContent className="space-y-2">
 
-            <p>
-              <strong>Company:</strong> Example Company
-            </p>
+          <CardContent>
 
-            <p>
-              <strong>Industry:</strong> Technology
-            </p>
-
-            <p>
-              <strong>Score:</strong> 85/100
-            </p>
-
-            <p>
-              <strong>Recommendation:</strong> Good potential lead.
+            <p className="whitespace-pre-wrap">
+              {analysis}
             </p>
 
           </CardContent>
+
+
         </Card>
+
       )}
+
 
     </div>
   );
