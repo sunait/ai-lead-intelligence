@@ -13,7 +13,7 @@ export default function DashboardLayout({
       <div className="flex-1">
         <Header />
 
-        <main className="p-6">
+        <main className="p-6 bg-muted/30 min-h-[calc(100vh-4rem)]">
           {children}
         </main>
       </div>

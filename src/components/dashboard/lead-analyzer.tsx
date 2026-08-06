@@ -4,6 +4,8 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { LoadingAnalysis } from "@/components/dashboard/loading-analysis";
+import { AnalysisResult } from "./analysis-result";
 
 import {
   Card,
@@ -62,7 +64,13 @@ export function LeadAnalyzer() {
 
 
   return (
-    <div className="space-y-6">
+    <div className="
+      space-y-6
+      animate-in
+      fade-in
+      slide-in-from-bottom-4
+      duration-500
+    ">
 
 
       <Card>
@@ -104,6 +112,11 @@ export function LeadAnalyzer() {
       </Card>
 
 
+      {loading && (
+        <LoadingAnalysis />
+      )}
+
+
 
       {analysis && (
 
@@ -118,9 +131,10 @@ export function LeadAnalyzer() {
 
           <CardContent>
 
-            <pre className="whitespace-pre-wrap text-sm">
-              {JSON.stringify(analysis, null, 2)}
-            </pre>
+            <AnalysisResult 
+              data={analysis}
+              url={url}
+            />
 
           </CardContent>
 
