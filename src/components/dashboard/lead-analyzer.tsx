@@ -15,9 +15,24 @@ import {
 } from "@/components/ui/card";
 
 
+interface AnalysisData {
+  companyName: string;
+  industry: string;
+  overview: string;
+  businessModel: string;
+  products: string[];
+  targetCustomers: string[];
+  painPoints: string[];
+  salesOpportunities: string[];
+  outreachStrategy: string;
+  coldEmailAngle: string;
+}
+
+
 export function LeadAnalyzer() {
   const [url, setUrl] = useState("");
-  const [analysis, setAnalysis] = useState<any>(null);
+  const [analysis, setAnalysis] = useState<AnalysisData | null>(null);
+  const [sourcedFromLiveContent, setSourcedFromLiveContent] = useState(false);
   const [loading, setLoading] = useState(false);
 
 
@@ -26,7 +41,7 @@ export function LeadAnalyzer() {
     if (!url) return;
 
     setLoading(true);
-    setAnalysis("");
+    setAnalysis(null);
 
     try {
 
@@ -44,16 +59,20 @@ export function LeadAnalyzer() {
 
       const data = await response.json();
 
+      if (!response.ok) {
+        console.error(data.error || "Something went wrong.");
+        setAnalysis(null);
+        return;
+      }
+
       setAnalysis(data.analysis);
+      setSourcedFromLiveContent(Boolean(data.sourcedFromLiveContent));
 
 
     } catch (error) {
 
       console.error(error);
-
-      setAnalysis({
-        error: "Something went wrong."
-      });
+      setAnalysis(null);
 
     } finally {
 
@@ -134,6 +153,7 @@ export function LeadAnalyzer() {
             <AnalysisResult 
               data={analysis}
               url={url}
+              sourcedFromLiveContent={sourcedFromLiveContent}
             />
 
           </CardContent>

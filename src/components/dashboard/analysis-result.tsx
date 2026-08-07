@@ -1,4 +1,10 @@
 import {
+  AlertTriangle,
+  Sparkles,
+} from "lucide-react";
+
+import { Badge } from "@/components/ui/badge";
+import {
   Card,
   CardContent,
   CardHeader,
@@ -6,15 +12,31 @@ import {
 } from "@/components/ui/card";
 
 
+interface AnalysisData {
+  companyName: string;
+  industry: string;
+  overview: string;
+  businessModel: string;
+  products: string[];
+  targetCustomers: string[];
+  painPoints: string[];
+  salesOpportunities: string[];
+  outreachStrategy: string;
+  coldEmailAngle: string;
+}
+
+
 interface AnalysisResultProps {
-  data: any;
-  url:string;
+  data: AnalysisData;
+  url: string;
+  sourcedFromLiveContent: boolean;
 }
 
 
 export function AnalysisResult({
   data,
   url,
+  sourcedFromLiveContent,
 }: AnalysisResultProps) {
 
 
@@ -27,9 +49,28 @@ export function AnalysisResult({
 
         <CardHeader>
 
-        <CardTitle className="text-2xl">
-            {data.companyName}
-        </CardTitle>
+        <div className="flex items-start justify-between gap-3">
+
+          <CardTitle className="text-2xl">
+              {data.companyName}
+          </CardTitle>
+
+          {sourcedFromLiveContent ? (
+            <Badge variant="secondary" className="gap-1 shrink-0">
+              <Sparkles className="size-3" />
+              Live website data
+            </Badge>
+          ) : (
+            <Badge
+              variant="outline"
+              className="gap-1 shrink-0 text-amber-600 dark:text-amber-500"
+            >
+              <AlertTriangle className="size-3" />
+              General knowledge
+            </Badge>
+          )}
+
+        </div>
 
 
         <div className="flex gap-3 mt-2">
@@ -52,7 +93,7 @@ export function AnalysisResult({
         py-1
         text-sm
         ">
-        🌐 {data.url}
+        🌐 {url}
         </span>
 
 
@@ -107,8 +148,8 @@ export function AnalysisResult({
             <ul className="space-y-2">
 
               {data.targetCustomers?.map(
-                (item:string)=>(
-                  <li key={item}>
+                (item:string, index:number)=>(
+                  <li key={index}>
                     • {item}
                   </li>
                 )
@@ -141,9 +182,9 @@ export function AnalysisResult({
           <div className="flex flex-wrap gap-2">
 
             {data.products?.map(
-              (item:string)=>(
+              (item:string, index:number)=>(
                 <span
-                  key={item}
+                  key={index}
                   className="
                   px-3
                   py-1
@@ -188,8 +229,8 @@ export function AnalysisResult({
             <ul>
 
             {data.painPoints?.map(
-              (item:string)=>(
-                <li key={item}>
+              (item:string, index:number)=>(
+                <li key={index}>
                   ⚠ {item}
                 </li>
               )
@@ -211,8 +252,8 @@ export function AnalysisResult({
             <ul>
 
             {data.salesOpportunities?.map(
-              (item:string)=>(
-                <li key={item}>
+              (item:string, index:number)=>(
+                <li key={index}>
                   🚀 {item}
                 </li>
               )
