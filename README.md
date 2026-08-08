@@ -6,7 +6,7 @@ Built as a portfolio project to demonstrate practical, production-minded use of 
 
 ## Live Demo
 
-[Add your Vercel URL here after deployment]
+[https://ai-lead-intelligence-delta.vercel.app](https://ai-lead-intelligence-delta.vercel.app/dashboard)
 
 ## Features
 
@@ -90,7 +90,17 @@ Open [http://localhost:3000](http://localhost:3000) — it redirects straight to
 
 ## Screenshots
 
-*(Add screenshots here: empty state, loading state, successful analysis, error state)*
+**Successful analysis** — real website content scraped, structured sales brief generated, "Live website data" badge confirms the result is grounded in the actual page:
+
+![Successful analysis result](public/screenshots/success.png)
+
+**Loading state** — multi-step progress instead of a generic spinner:
+
+![Loading state](public/screenshots/loading.png)
+
+**Error state** — failures are caught and shown clearly instead of failing silently:
+
+![Error state](public/screenshots/error.png)
 
 ## What I Learned
 
