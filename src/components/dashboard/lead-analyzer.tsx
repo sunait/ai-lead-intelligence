@@ -32,6 +32,7 @@ interface AnalysisData {
 
 export function LeadAnalyzer() {
   const [url, setUrl] = useState("");
+  const [analyzedUrl, setAnalyzedUrl] = useState("");
   const [analysis, setAnalysis] = useState<AnalysisData | null>(null);
   const [sourcedFromLiveContent, setSourcedFromLiveContent] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -73,6 +74,7 @@ export function LeadAnalyzer() {
 
       setAnalysis(data.analysis);
       setSourcedFromLiveContent(Boolean(data.sourcedFromLiveContent));
+      setAnalyzedUrl(url);
 
 
     } catch (error) {
@@ -169,7 +171,7 @@ export function LeadAnalyzer() {
 
             <AnalysisResult 
               data={analysis}
-              url={url}
+              url={analyzedUrl}
               sourcedFromLiveContent={sourcedFromLiveContent}
             />
 

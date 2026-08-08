@@ -1,6 +1,13 @@
 import {
   AlertTriangle,
   Sparkles,
+  Building2,
+  Globe,
+  Users,
+  Package,
+  AlertCircle,
+  TrendingUp,
+  Mail,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -45,66 +52,58 @@ export function AnalysisResult({
     <div className="space-y-6">
 
 
+      {/* Company header */}
       <Card>
 
         <CardHeader>
 
-        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-start justify-between gap-4">
 
-          <CardTitle className="text-2xl">
+            <CardTitle className="text-3xl font-bold tracking-tight">
               {data.companyName}
-          </CardTitle>
+            </CardTitle>
 
-          {sourcedFromLiveContent ? (
-            <Badge variant="secondary" className="gap-1 shrink-0">
-              <Sparkles className="size-3" />
-              Live website data
-            </Badge>
-          ) : (
-            <Badge
-              variant="outline"
-              className="gap-1 shrink-0 text-amber-600 dark:text-amber-500"
-            >
-              <AlertTriangle className="size-3" />
-              General knowledge
-            </Badge>
-          )}
+            {sourcedFromLiveContent ? (
+              <Badge
+                variant="secondary"
+                className="h-7 gap-1.5 shrink-0 px-3 text-sm"
+              >
+                <Sparkles className="size-3.5" />
+                Live website data
+              </Badge>
+            ) : (
+              <Badge
+                variant="outline"
+                className="h-7 gap-1.5 shrink-0 px-3 text-sm text-amber-600 dark:text-amber-500"
+              >
+                <AlertTriangle className="size-3.5" />
+                General knowledge
+              </Badge>
+            )}
 
-        </div>
-
-
-        <div className="flex gap-3 mt-2">
-
-        <span className="
-        rounded-full
-        bg-muted
-        px-3
-        py-1
-        text-sm
-        ">
-        🏷 {data.industry}
-        </span>
+          </div>
 
 
-        <span className="
-        rounded-full
-        bg-muted
-        px-3
-        py-1
-        text-sm
-        ">
-        🌐 {url}
-        </span>
+          <div className="flex flex-wrap gap-2.5 mt-3">
 
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3.5 py-1.5 text-sm font-medium text-primary">
+              <Building2 className="size-3.5" />
+              {data.industry}
+            </span>
 
-        </div>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-3.5 py-1.5 text-sm text-muted-foreground">
+              <Globe className="size-3.5" />
+              {url}
+            </span>
+
+          </div>
 
         </CardHeader>
 
 
         <CardContent>
 
-          <p>
+          <p className="text-base leading-relaxed text-foreground/90">
             {data.overview}
           </p>
 
@@ -113,44 +112,46 @@ export function AnalysisResult({
       </Card>
 
 
-
-
-      <div className="grid md:grid-cols-2 gap-6">
+      {/* Business model + target customers */}
+      <div className="grid md:grid-cols-2 gap-4">
 
 
         <Card>
 
           <CardHeader>
-            <CardTitle>
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Building2 className="size-5 text-primary" />
               Business Model
             </CardTitle>
           </CardHeader>
 
           <CardContent>
-            {data.businessModel}
+            <p className="text-base leading-relaxed">
+              {data.businessModel}
+            </p>
           </CardContent>
 
         </Card>
 
 
-
-
         <Card>
 
           <CardHeader>
-            <CardTitle>
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Users className="size-5 text-primary" />
               Target Customers
             </CardTitle>
           </CardHeader>
 
           <CardContent>
 
-            <ul className="space-y-2">
+            <ul className="space-y-2.5">
 
               {data.targetCustomers?.map(
-                (item:string, index:number)=>(
-                  <li key={index}>
-                    • {item}
+                (item: string, index: number) => (
+                  <li key={index} className="flex items-start gap-2.5 text-base">
+                    <span className="mt-2 size-1.5 shrink-0 rounded-full bg-primary" />
+                    <span className="leading-relaxed">{item}</span>
                   </li>
                 )
               )}
@@ -165,13 +166,12 @@ export function AnalysisResult({
       </div>
 
 
-
-
-
+      {/* Products */}
       <Card>
 
         <CardHeader>
-          <CardTitle>
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <Package className="size-5 text-primary" />
             Products & Services
           </CardTitle>
         </CardHeader>
@@ -179,19 +179,13 @@ export function AnalysisResult({
 
         <CardContent>
 
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2.5">
 
             {data.products?.map(
-              (item:string, index:number)=>(
+              (item: string, index: number) => (
                 <span
                   key={index}
-                  className="
-                  px-3
-                  py-1
-                  rounded-full
-                  bg-muted
-                  text-sm
-                  "
+                  className="rounded-full bg-muted px-4 py-2 text-sm font-medium"
                 >
                   {item}
                 </span>
@@ -200,107 +194,102 @@ export function AnalysisResult({
 
           </div>
 
-
         </CardContent>
 
       </Card>
 
 
+      {/* Pain points + opportunities */}
+      <div className="grid md:grid-cols-2 gap-4">
 
+        <Card className="border-amber-500/20 bg-amber-500/[0.03]">
 
-
-      <Card>
-
-        <CardHeader>
-          <CardTitle>
-            Sales Intelligence
-          </CardTitle>
-        </CardHeader>
-
-
-        <CardContent className="space-y-4">
-
-
-          <div>
-            <h4 className="font-semibold">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-lg text-amber-700 dark:text-amber-500">
+              <AlertCircle className="size-5" />
               Pain Points
-            </h4>
+            </CardTitle>
+          </CardHeader>
 
-            <ul>
+          <CardContent>
 
-            {data.painPoints?.map(
-              (item:string, index:number)=>(
-                <li key={index}>
-                  ⚠ {item}
-                </li>
-              )
-            )}
+            <ul className="space-y-2.5">
 
-            </ul>
-
-          </div>
-
-
-
-          <div>
-
-            <h4 className="font-semibold">
-              Opportunities
-            </h4>
-
-
-            <ul>
-
-            {data.salesOpportunities?.map(
-              (item:string, index:number)=>(
-                <li key={index}>
-                  🚀 {item}
-                </li>
-              )
-            )}
+              {data.painPoints?.map(
+                (item: string, index: number) => (
+                  <li key={index} className="flex items-start gap-2.5 text-base">
+                    <span className="mt-2 size-1.5 shrink-0 rounded-full bg-amber-500" />
+                    <span className="leading-relaxed">{item}</span>
+                  </li>
+                )
+              )}
 
             </ul>
 
+          </CardContent>
 
-          </div>
-
-
-        </CardContent>
-
-      </Card>
+        </Card>
 
 
+        <Card className="border-emerald-500/20 bg-emerald-500/[0.03]">
+
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-lg text-emerald-700 dark:text-emerald-500">
+              <TrendingUp className="size-5" />
+              Sales Opportunities
+            </CardTitle>
+          </CardHeader>
+
+          <CardContent>
+
+            <ul className="space-y-2.5">
+
+              {data.salesOpportunities?.map(
+                (item: string, index: number) => (
+                  <li key={index} className="flex items-start gap-2.5 text-base">
+                    <span className="mt-2 size-1.5 shrink-0 rounded-full bg-emerald-500" />
+                    <span className="leading-relaxed">{item}</span>
+                  </li>
+                )
+              )}
+
+            </ul>
+
+          </CardContent>
+
+        </Card>
+
+      </div>
 
 
-
+      {/* Outreach */}
       <Card>
 
         <CardHeader>
-          <CardTitle>
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <Mail className="size-5 text-primary" />
             Outreach Strategy
           </CardTitle>
         </CardHeader>
 
 
-        <CardContent>
+        <CardContent className="space-y-5">
 
-          <p>
+          <p className="text-base leading-relaxed">
             {data.outreachStrategy}
           </p>
 
+          <div className="space-y-2">
 
-          <br />
+            <h4 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+              Cold Email Angle
+            </h4>
 
+            <p className="rounded-xl bg-muted/60 p-4 text-base leading-relaxed">
+              {data.coldEmailAngle}
+            </p>
 
-          <h4 className="font-semibold">
-            Cold Email Angle
-          </h4>
-
-
-          <p>
-            {data.coldEmailAngle}
-          </p>
-
+          </div>
 
         </CardContent>
 
