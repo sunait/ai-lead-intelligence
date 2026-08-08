@@ -221,6 +221,28 @@ try {
   }
 
 
+  // Network-level failures (no internet, DNS issue, firewall/VPN
+  // blocking the request, Google endpoint unreachable) don't come
+  // with an HTTP status - the SDK just throws "fetch failed".
+  const isNetworkError =
+    error.message?.includes("fetch failed") ||
+    error.cause?.code === "ENOTFOUND" ||
+    error.cause?.code === "ECONNREFUSED" ||
+    error.cause?.code === "ETIMEDOUT";
+
+  if (isNetworkError) {
+    return NextResponse.json(
+      {
+        error:
+          "Could not reach the AI service. Check your internet connection and try again."
+      },
+      {
+        status: 503
+      }
+    );
+  }
+
+
   throw error;
 }
 
@@ -243,9 +265,22 @@ try {
     );
 
 
-  } catch (error) {
+  } catch (error: any) {
 
     console.error("Gemini API error:", error);
+
+
+    if (error.message?.includes("JSON")) {
+      return NextResponse.json(
+        {
+          error:
+            "The AI returned an unexpected response. Please try again."
+        },
+        {
+          status: 502
+        }
+      );
+    }
 
 
     return NextResponse.json(

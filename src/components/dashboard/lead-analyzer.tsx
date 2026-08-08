@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { LoadingAnalysis } from "@/components/dashboard/loading-analysis";
 import { AnalysisResult } from "./analysis-result";
+import { AnalysisError } from "./analysis-error";
 
 import {
   Card,
@@ -34,14 +35,19 @@ export function LeadAnalyzer() {
   const [analysis, setAnalysis] = useState<AnalysisData | null>(null);
   const [sourcedFromLiveContent, setSourcedFromLiveContent] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
 
   async function handleAnalyze() {
 
-    if (!url) return;
+    if (!url) {
+      setError("Please enter a company URL.");
+      return;
+    }
 
     setLoading(true);
     setAnalysis(null);
+    setError(null);
 
     try {
 
@@ -60,7 +66,7 @@ export function LeadAnalyzer() {
       const data = await response.json();
 
       if (!response.ok) {
-        console.error(data.error || "Something went wrong.");
+        setError(data.error || "Something went wrong. Please try again.");
         setAnalysis(null);
         return;
       }
@@ -72,7 +78,9 @@ export function LeadAnalyzer() {
     } catch (error) {
 
       console.error(error);
-      setAnalysis(null);
+      setError(
+        "Could not reach the server. Check your connection and try again."
+      );
 
     } finally {
 
@@ -110,6 +118,11 @@ export function LeadAnalyzer() {
             onChange={(e) =>
               setUrl(e.target.value)
             }
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !loading) {
+                handleAnalyze();
+              }
+            }}
           />
 
 
@@ -136,8 +149,12 @@ export function LeadAnalyzer() {
       )}
 
 
+      {error && !loading && (
+        <AnalysisError message={error} />
+      )}
 
-      {analysis && (
+
+      {analysis && !loading && (
 
         <Card>
 
